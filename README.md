@@ -17,32 +17,37 @@
 
 ## Usage Instructions:
 
-  #### Easy Plug-N-Play (Windows only)
+#### Easy Plug-N-Play (Windows only)
 
-  1. Download Nest.Clipper.exe from the latest [Release](https://github.com/kneelstar/Google-Nest-Clipper/releases).
-  ![download exe on release page](readme_pics/image.png)
+1. Download Nest.Clipper.exe from the latest [Release](https://github.com/kneelstar/Google-Nest-Clipper/releases).
+![download exe on release page](readme_pics/image.png)
   <br />
   <br />
+  
   2. Create a new app password for your [Google account](https://myaccount.google.com/apppasswords) and copy it.
-  ![alt text](readme_pics/image-8.png)
-  ![alt text](readme_pics/image-1.png)
+![create app password](readme_pics/image-8.png)
+![copy app password](readme_pics/image-1.png)   
   <br />
   <br />
+  
   3. Run the .exe file. (You might get a Windows warning - Click on "More info" and click "Run Anyway")
-  ![alt text](readme_pics/image-5.png)
-  ![alt text](readme_pics/image-6.png)
+  ![run exe from downloads](readme_pics/image-9.png)
+  ![windows unknown publisher warning](readme_pics/image-5.png)
+  ![run anyway](readme_pics/image-6.png)
 
   Finally you should see two things open up:
-  ![alt text](readme_pics/image-4.png)
+  ![pre auth Nest Clipper](readme_pics/image-4.png)
   <br />
   <br />
+  
   4. Enter your Nest-linked Google account email and paste the app password from step 2, then click on Authenticate.
-  ![alt text](readme_pics/image-2.png)
+  ![authenticate with creds](readme_pics/image-2.png)
   
   If the authenication is successful you should see the following window open:
-  ![alt text](readme_pics/image-7.png)
+  ![start Nest Clipper](readme_pics/image-7.png)
   <br />
   <br />
+  
   5. Select the folder where you want to save your clips.
   6. Specify how often the app should check for new clips. The default interval is 3600 seconds (1 hour).
   7. Click on the Start button and leave the app running in the background. 
