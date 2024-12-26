@@ -10,30 +10,61 @@ class DatabaseHandler:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
-                CREATE TABLE IF NOT EXISTS env_variables (
+                CREATE TABLE IF NOT EXISTS app_prefs (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     key TEXT UNIQUE NOT NULL,
                     value TEXT NOT NULL
                 )
             ''')
 
-    def save_env_variables(self, google_nest_clipper_prefs):
+    def save_app_prefs(self, nest_clipper_prefs):
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
-            for key, value in google_nest_clipper_prefs.items():
-                cursor.execute("INSERT OR REPLACE INTO env_variables (key, value) VALUES (?, ?)", (key, value))
+            for key, value in nest_clipper_prefs.items():
+                cursor.execute("INSERT OR REPLACE INTO app_prefs (key, value) VALUES (?, ?)", (key, value))
 
-    def get_env_variables(self):
+    def get_app_prefs(self):
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT key, value FROM env_variables")
+            cursor.execute("SELECT key, value FROM app_prefs")
             return dict(cursor.fetchall())
+        
+    def delete_table(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("DROP TABLE IF EXISTS app_prefs")
+
+        conn.close()
+        os.remove(self.db_path)
+
+        
+    def get_master_token_creation_date(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT value FROM app_prefs WHERE key ='MASTER_TOKEN_CREATION_DATE'")
+            return cursor.fetchone()[0]
+        
+    def get_master_token(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT value FROM app_prefs WHERE key ='MASTER_TOKEN'")
+            return cursor.fetchone()[0]
 
 
 def get_db_path():
-    if os.name.lower() == 'nt':  # Windows
-        return os.path.join(os.getenv('APPDATA'), 'GoogleNestClipper', 'google_nest_clipper_prefs.db')
-    elif 'darwin' in os.uname().sysname.lower():  # macOS
-        return os.path.join(os.path.expanduser('~/Library/Application Support/GoogleNestClipper'), 'google_nest_clipper_prefs.db')
-    else:  # Linux
-        return os.path.join(os.path.expanduser('~/.config/GoogleNestClipper'), 'google_nest_clipper_prefs.db')
+    # Windows
+    if os.name.lower() == 'nt': 
+        return os.path.join(os.getenv('APPDATA'), 'NestClipper', 'nest_clipper_prefs.db')
+    
+    # MacOs
+    elif 'darwin' in os.uname().sysname.lower():
+        return os.path.join(os.path.expanduser('~/Library/Application Support/NestClipper'), 'nest_clipper_prefs.db')
+    
+    # Linux
+    else:
+        return os.path.join(os.path.expanduser('~/.config/NestClipper'), 'nest_clipper_prefs.db')
+
+def check_database_exists():
+    # Replace 'path_to_secure_db' with the actual path to your secure database file
+    db_path = get_db_path()
+    return os.path.exists(db_path)
