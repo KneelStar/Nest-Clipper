@@ -1,23 +1,17 @@
-import datetime
-import threading
 import tkinter as tk
 from tkinter import messagebox, filedialog
-from app_prefs_database import DatabaseHandler, get_db_path
-from nest_clipper import main
+from nest_clipper_backend import NestClipperBackend
 
 class NestClipperApp:
     def __init__(self, root):
         self.root = root
-        self.running = False
-        self.refresh_interval = None
-        self.timer_thread = None
-        self.db_handler = DatabaseHandler(get_db_path())
+        self.backend = NestClipperBackend()
 
         self.root.title("Nest Clipper")
         self.root.geometry("570x330")
         self.root.configure(bg="#f2f2f2")
         self.initialize_ui()
-        self.load_app_prefs()
+        self.load_preferences()
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def initialize_ui(self):
@@ -92,19 +86,19 @@ class NestClipperApp:
             bg="#FF5733",
             fg="white",
         )
-        logout_button.place(relx=0.95, rely=0.95, anchor="se")  # Bottom right corner
 
-    def load_app_prefs(self):
-        nest_clipper_prefs = self.db_handler.get_app_prefs()
-        if nest_clipper_prefs:
+        logout_button.place(relx=0.95, rely=0.95, anchor="se")
+
+    def load_preferences(self):
+        prefs = self.backend.get_preferences()
+        if prefs:
             self.email_entry.config(state="normal")
-            self.email_entry.insert(0, nest_clipper_prefs.get("USERNAME", ""))
+            self.email_entry.insert(0, prefs.get("USERNAME", ""))
             self.email_entry.config(state="readonly")
             self.video_save_path_entry.config(state="normal")
-            self.video_save_path_entry.insert(0, nest_clipper_prefs.get("VIDEO_SAVE_PATH", ""))
+            self.video_save_path_entry.insert(0, prefs.get("VIDEO_SAVE_PATH", ""))
             self.video_save_path_entry.config(state="readonly")
-            self.time_to_refresh_entry.insert(0, nest_clipper_prefs.get("TIME_TO_REFRESH"))
-            self.refresh_interval = int(nest_clipper_prefs.get("TIME_TO_REFRESH"))
+            self.time_to_refresh_entry.insert(0, prefs.get("TIME_TO_REFRESH"))
 
     def logout(self):
         if messagebox.askyesno(
@@ -112,7 +106,7 @@ class NestClipperApp:
             "Are you sure you want to log out? Frequent Logging out may lead Google to disconnect your android devices and other weird things may happen.",
         ):
             try:
-                self.db_handler.delete_table()
+                self.backend.delete_preferences()
                 self.root.destroy()
                 import pre_auth_app_ui
                 root = tk.Tk()
@@ -120,11 +114,9 @@ class NestClipperApp:
                 root.mainloop()
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to log out: {str(e)}")
-
+    
     def on_closing(self):
-        self.running = False
-        if self.timer_thread:
-            self.timer_thread.cancel()
+        self.backend.stop_task()
         self.root.destroy()
 
     def select_save_path(self):
@@ -135,7 +127,7 @@ class NestClipperApp:
             self.video_save_path_entry.insert(0, directory)
             self.video_save_path_entry.config(state="readonly")
 
-    def save_app_prefs(self):
+    def save_preferences(self):
         email = self.email_entry.get()
         video_save_path = self.video_save_path_entry.get()
         time_to_refresh = self.time_to_refresh_entry.get()
@@ -144,27 +136,24 @@ class NestClipperApp:
             messagebox.showerror("Error", "All fields are required.")
             return False
 
-        nest_clipper_prefs = {
+        prefs = {
             "USERNAME": email,
             "VIDEO_SAVE_PATH": video_save_path,
             "TIME_TO_REFRESH": time_to_refresh,
         }
-        self.db_handler.save_app_prefs(nest_clipper_prefs)
+        self.backend.save_preferences(prefs)
         return True
 
     def toggle_running_state(self):
-        if self.running:
-            self.running = False
+        if self.backend.running:
+            self.backend.stop_task()
             self.start_stop_button.config(text="Start", bg="#4CAF50")
             self.set_fields_state("normal")
-            if self.timer_thread:
-                self.timer_thread.cancel()
         else:
-            if self.save_app_prefs():
-                self.running = True
+            if self.save_preferences():
+                self.backend.start_task()
                 self.start_stop_button.config(text="Stop", bg="#FF5733")
                 self.set_fields_state("readonly")
-                self.start_periodic_task()
 
     def set_fields_state(self, state):
         self.time_to_refresh_entry.config(state=state)
@@ -172,24 +161,6 @@ class NestClipperApp:
             self.browse_button.config(state="disabled", bg="#312f2f")
         else:
             self.browse_button.config(state="normal", bg="#4CAF50")
-
-    def start_periodic_task(self):
-        def task():
-            if self.running:
-                nest_clipper_prefs = self.db_handler.get_app_prefs()
-                main(
-                    nest_clipper_prefs.get("MASTER_TOKEN", ""),
-                    nest_clipper_prefs.get("USERNAME", ""),
-                    nest_clipper_prefs.get("VIDEO_SAVE_PATH", ""),
-                )
-                self.refresh_interval = int(
-                    nest_clipper_prefs.get("TIME_TO_REFRESH", self.refresh_interval)
-                )
-                if self.running:
-                    self.timer_thread = threading.Timer(self.refresh_interval, task)
-                    self.timer_thread.start()
-
-        task()
 
 if __name__ == "__main__":
     root = tk.Tk()

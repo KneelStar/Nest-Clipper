@@ -17,6 +17,12 @@
 
 ## Usage Instructions:
 
+A couple of different ways to get this running:
+1. Plug-N-Play (Windows only)
+2. Python with App UI
+3. Python console mode
+
+
 #### Easy Plug-N-Play (Windows only)
 
 1. Download Nest.Clipper.exe from the latest [Release](https://github.com/kneelstar/Google-Nest-Clipper/releases).
@@ -57,18 +63,26 @@
   <br />
   <br />
   
-  #### Running with python 3.9.2
+  #### Running with Python and App UI
   Please make sure you are running with python 3.9.2
   1. ``git clone https://github.com/KneelStar/Nest-Clipper.git``
   2. ``cd Nest-Clipper``
   3. ``python -m venv venv``
   4. If Win: ``venv\Scripts\activate``, If MacOs/Linux: ``source venv/bin/activate``
   5. ``pip install -r requirements.txt``
-  6. ``pip install requests==2.25.1``
   6. ``python app.py``
-
-
-
+  
+  <br />
+  <br />
+  
+  #### Running in Python console mode
+  Please make sure you are running with python 3.9.2
+  1. ``git clone https://github.com/KneelStar/Nest-Clipper.git``
+  2. ``cd Nest-Clipper``
+  3. ``python -m venv venv``
+  4. If Win: ``venv\Scripts\activate``, If MacOs/Linux: ``source venv/bin/activate``
+  5. ``pip install -r requirements.txt``
+  6. ``python nest_clipper.py``
 
 ## Credits:
 

@@ -65,6 +65,5 @@ def get_db_path():
         return os.path.join(os.path.expanduser('~/.config/NestClipper'), 'nest_clipper_prefs.db')
 
 def check_database_exists():
-    # Replace 'path_to_secure_db' with the actual path to your secure database file
     db_path = get_db_path()
     return os.path.exists(db_path)
