@@ -24,16 +24,14 @@ def main(MASTER_TOKEN, USERNAME, VIDEO_SAVE_PATH):
         
         print(('Events for ' + nest_device.device_name + ': '), events)
         for event in events:
-            # Returns the bytes of the .mp4 video
             video_data = nest_device.download_camera_event(event)
             
-            # Sanitize the filename to remove invalid characters
-            safe_filename = f"{nest_device.device_name}-{int(event.start_time.timestamp()*1000)}.mp4"
+            event_year = str(event.start_time.date().year)
+            event_month = str(event.start_time.date().month)
+            event_day = str(event.start_time.date().day)
+            safe_filename = f"{event.start_time.astimezone().strftime('%Y%m%dT%H%M%S%z')}.mp4"
             
-            # Check if file already exists before saving
-            safe_filename_with_ext = os.path.join(VIDEO_SAVE_PATH, safe_filename)
-            
-            # Ensure the directory exists
+            safe_filename_with_ext = os.path.join(VIDEO_SAVE_PATH, event_year, event_month, event_day, safe_filename)            
             os.makedirs(os.path.dirname(safe_filename_with_ext), exist_ok=True)
 
             if not os.path.exists(safe_filename_with_ext):
