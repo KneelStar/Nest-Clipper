@@ -1,8 +1,9 @@
 import os
 import sys
 import tkinter as tk
-from app_prefs_database import check_database_exists
+from app_prefs_database import DatabaseHandler, check_database_exists, get_db_path
 from auth_app_ui import NestClipperApp
+from nest_clipper_backend import is_user_authed
 from pre_auth_app_ui import PreAuthNestClipperApp
 
 def resource_path(relative_path):
@@ -17,7 +18,7 @@ if __name__ == "__main__":
     icon_image = tk.PhotoImage(file=icon_path)
     root.iconphoto(False, icon_image)
 
-    if check_database_exists(): # this should also check if master token is valid. not sure how to do that
+    if is_user_authed():
         app = NestClipperApp(root)
         root.mainloop()
 

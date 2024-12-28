@@ -77,7 +77,7 @@ class NestClipperBackend:
         print("Nest Clipper")
         print("-------------------")
 
-        if not check_database_exists():
+        if not is_user_authed():
             self._prompt_for_credentials()
 
         print("\nStarting clipper...")
@@ -121,6 +121,9 @@ class NestClipperBackend:
                 return preferences["MASTER_TOKEN"], email, video_save_path
             except Exception as e:
                 print(f"Error: {e}. Please try again.\n")
+
+def is_user_authed():
+    return str(DatabaseHandler(get_db_path()).get_app_prefs().get("MASTER_TOKEN")).startswith("aas") # this should also check if master token is valid. not sure how to do that
 
 def main(master_token, username, video_save_path):
     connection = Connection(master_token, username)
