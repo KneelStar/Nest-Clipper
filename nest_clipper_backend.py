@@ -129,16 +129,21 @@ def main(master_token, username, video_save_path):
     connection = Connection(master_token, username)
     logger.info("Getting Camera Devices")
     nest_camera_devices = connection.get_nest_camera_devices()
+    end_time = datetime.datetime.now() - datetime.timedelta(minutes=3)
 
+    amount_of_new_clips_saved = 0
+
+    print(f"Checking for new events as of {end_time}")
+    print(f"Found Cameras: {[nest_device.device_name for nest_device in nest_camera_devices]}")
     for nest_device in nest_camera_devices:
-        events = nest_device.get_events(
-            end_time = pytz.timezone("US/Central").localize(datetime.datetime.now()),
 
-            # SOMETHING WEIRD GOING ON HERE. TOWARDS THE END OF HOURS, NO EVENTS ARE FOUND.
+        events = nest_device.get_events(
+            end_time = end_time,
+
+            # SOMETHING WEIRD GOING ON HERE MAYBE. TOWARDS THE END OF HOURS, NOT ALL EXPECTED EVENTS ARE FOUND MAYBE.
             duration_minutes = HOURS_TO_CHECK * 60
         )
 
-        print(f"Events for {nest_device.device_name}: {events}")
         for event in events:
             video_data = nest_device.download_camera_event(event)
             event_year = str(event.start_time.date().year)
@@ -146,10 +151,13 @@ def main(master_token, username, video_save_path):
             event_day = str(event.start_time.date().day)
             safe_filename = f"{event.start_time.astimezone().strftime('%Y%m%dT%H%M%S%z')}.mp4"
             
-            safe_filename_with_ext = os.path.join(video_save_path, event_year, event_month, event_day, safe_filename)
+            safe_filename_with_ext = os.path.join(video_save_path, event_year, event_month, event_day, nest_device.device_name, safe_filename)
             os.makedirs(os.path.dirname(safe_filename_with_ext), exist_ok=True)
 
             if not os.path.exists(safe_filename_with_ext):
                 with open(safe_filename_with_ext, "wb") as f:
                     print(f"Saving video to {safe_filename_with_ext}")
+                    amount_of_new_clips_saved += 1
                     f.write(video_data)
+
+    print(f"Saved {amount_of_new_clips_saved} new clips\n\n")
