@@ -64,7 +64,7 @@ A couple of different ways to get this running:
   <br />
   
   #### Running with Python and App UI
-  Please make sure you are running with python 3.9.2
+  Please make sure you are running with python 3.9
   1. ``git clone https://github.com/KneelStar/Nest-Clipper.git``
   2. ``cd Nest-Clipper``
   3. ``python -m venv venv``
@@ -76,7 +76,7 @@ A couple of different ways to get this running:
   <br />
   
   #### Running in Python console mode
-  Please make sure you are running with python 3.9.2
+  Please make sure you are running with python 3.9
   1. ``git clone https://github.com/KneelStar/Nest-Clipper.git``
   2. ``cd Nest-Clipper``
   3. ``python -m venv venv``
