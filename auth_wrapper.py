@@ -53,7 +53,7 @@ class GLocalAuthenticationTokensMultiService(glocaltokens.client.GLocalAuthentic
             logger.debug("Access token retrieved successfully. Token timestamp: %s", self.access_token_date)
             return self.access_token
         except Exception as e:
-            logger.exception("An error occurred while fetching the access token: %s", e)
+            logger.error("An error occurred while fetching the access token: %s", e)
             return None
 
 
@@ -90,7 +90,7 @@ class Connection:
                 url=url,
                 params=params,
                 headers={"Authorization": f"Bearer {access_token}"},
-                timeout=10,
+                timeout=30,
                 verify=True,  # Ensures SSL certificate validation
             )
             response.raise_for_status()
