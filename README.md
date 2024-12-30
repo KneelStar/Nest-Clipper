@@ -71,6 +71,7 @@ A couple of different ways to get this running:
   4. If Win: ``venv\Scripts\activate``, If MacOs/Linux: ``source venv/bin/activate``
   5. ``pip install -r requirements.txt``
   6. ``python app.py``
+  7. Get app password from [here](https://myaccount.google.com/apppasswords)
   
   <br />
   <br />
@@ -83,13 +84,19 @@ A couple of different ways to get this running:
   4. If Win: ``venv\Scripts\activate``, If MacOs/Linux: ``source venv/bin/activate``
   5. ``pip install -r requirements.txt``
   6. ``python nest_clipper.py``
-
+  7. Get app password from [here](https://myaccount.google.com/apppasswords)
+  
+  <br />
+  <br />
+  
 ## Credits:
 
 A lot of the heavy lifting was done by people below. Without them, their code, their contributions, their time - this app would not have been possible. 
 
 @TamirMa - [**google-nest-telegram-sync**](https://github.com/TamirMa/google-nest-telegram-sync) 
 You can read TamirMa's full story [here](https://medium.com/@tamirmayer/google-nest-camera-internal-api-fdf9dc3ce167)
+
+@KaitoKid - [NestVideoBackup](https://github.com/KaitoKid/NestVideoBackup)
 
 The contributors of [**gpsoauth**](https://github.com/simon-weber/gpsoauth) module
 
