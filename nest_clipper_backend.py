@@ -167,12 +167,14 @@ def main(master_token, username, video_save_path):
                 logger.error(f"Failed to download camera event for {event.event_id} from {nest_device.device_name}: {e}")
                 continue
 
-            event_year = str(event.start_time.date().year)
-            event_month = str(event.start_time.date().month)
-            event_day = str(event.start_time.date().day)
-            safe_filename = f"{event.start_time.astimezone().strftime('%Y%m%dT%H%M%S%z')}.mp4"
+            event_start_time = event.start_time.astimezone()
+            event_year = str(event_start_time.year)
+            event_month = str(event_start_time.month)
+            event_day = str(event_start_time.day)
             
+            safe_filename = f"{event_start_time.strftime('%Y%m%dT%H%M%S%z')}.mp4"
             safe_filename_with_ext = os.path.join(video_save_path, event_year, event_month, event_day, nest_device.device_name, safe_filename)
+            
             os.makedirs(os.path.dirname(safe_filename_with_ext), exist_ok=True)
 
             if not os.path.exists(safe_filename_with_ext):
