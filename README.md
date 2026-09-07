@@ -4,8 +4,6 @@
 
 ### Easily download your Nest Cam event history for free.
 
-<a href="https://buymeacoffee.com/kneelstar" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
-
 [Note]: Before we proceed, please note that this project uses unpublished APIs, which may stop working if Google makes changes to how Nest event history is handled, how clips are downloaded, etc. There are several potential points of failure, but as of Dec 26, 2024, this project is functional. It is intended for personal use only. Use it at your own risk!
 
 ## Important Considerations:
@@ -103,5 +101,3 @@ The contributors of [**gpsoauth**](https://github.com/simon-weber/gpsoauth) modu
 The contributors of [**glocaltokens**](https://github.com/leikoilja/glocaltokens) module
 
 The authors of the docker [**ha-google-home_get-token**](https://hub.docker.com/r/breph/ha-google-home_get-token)
-
-<a href="https://buymeacoffee.com/kneelstar" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
